@@ -136,7 +136,8 @@ a {
     background: darkorange;
 }
 .sticky-elem {
-    position: none;
+    display: none;
+    position: fixed;
     top: 0;
     /* left: 0; */
     width: 100%;

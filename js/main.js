@@ -69,14 +69,16 @@
             if (currentScene === 0) return;
             currentScene--;
         }
-        console.log('currentScene: ', currentScene);
+
+        document.body.setAttribute('id', `show-scene-${currentScene}`);
     }
 
-    // 윈도우 사이즈 변경되면, 스크롤 높이도 변경되도록 설정
-    window.addEventListener('resize', setLayout);
     window.addEventListener('scroll', () => {
         yOffset = window.pageYOffset;
         scrollLoop();
     })
-    setLayout();
+
+    window.addEventListener('load', setLayout);
+    // 윈도우 사이즈 변경되면, 스크롤 높이도 변경되도록 설정
+    window.addEventListener('resize', setLayout);
 })();
