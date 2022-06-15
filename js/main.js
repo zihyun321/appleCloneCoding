@@ -66,6 +66,7 @@
 
         // 스크롤 올릴 때(스크롤 감소)
         if (yOffset < prevScrollHeight) {
+            if (currentScene === 0) return;
             currentScene--;
         }
         console.log('currentScene: ', currentScene);
