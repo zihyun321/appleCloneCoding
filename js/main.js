@@ -2,9 +2,10 @@
 // 즉시 호출 함수
 (() => {
     // 모든 애니메이션에 대한 정보를 배열에 담아 두어야 한다.
-    let yOffset = 0;            // window.pageYOffset 대신 사용할 변수  
-    let prevScrollHeight = 0;   // 현재 스크롤 위치보다 이전에 위치한 스크롤 섹션들의 위치의 합
-    let currentScene = 0;       // 현재 활성화된 scene (scroll-section)
+    let yOffset = 0;                // window.pageYOffset 대신 사용할 변수  
+    let prevScrollHeight = 0;       // 현재 스크롤 위치보다 이전에 위치한 스크롤 섹션들의 위치의 합
+    let currentScene = 0;           // 현재 활성화된 scene (scroll-section)
+    let enterNewScene = false;      // 새로운 scene이 시작되는 순간 true
 
     const sceneInfo = [
         {   // 0
@@ -103,6 +104,7 @@
     // 스크롤에 따라 활성화시킬 섹션(scene) 정하는 함수 (scroll 했을 때 실행됨)
     function scrollLoop() {
         prevScrollHeight = 0;
+        enterNewScene = false;
         for (let i = 0; i < currentScene; i++) {
             prevScrollHeight += sceneInfo[i].scrollHeight;
         }
@@ -112,16 +114,20 @@
          */
         // 스크롤 내릴 땐 (스크롤 증가), current scroll이 다시 증가해야함
         if (yOffset > prevScrollHeight + sceneInfo[currentScene].scrollHeight) {
+            enterNewScene = true;
             currentScene++;
+            document.body.setAttribute('id', `show-scene-${currentScene}`);
         }
 
         // 스크롤 올릴 때(스크롤 감소)
         if (yOffset < prevScrollHeight) {
-            if (currentScene === 0) return;
+            if (currentScene === 0) return;     // 브라우저 바운스 효과로 인해 마이너스 되는 것을 방지(모바일)
+            enterNewScene = true;
             currentScene--;
+            document.body.setAttribute('id', `show-scene-${currentScene}`);
         }
 
-        document.body.setAttribute('id', `show-scene-${currentScene}`);
+        if (enterNewScene) return;              // scene 바뀌는 순간에 animation이 이상한 값이 출력되는 것을 방지하기 위한 것
         playAnimation();
     }
 
